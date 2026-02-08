@@ -1,37 +1,28 @@
 # Valentine Link App 💘
 
-Simple deployable prank/proposal app.
+Mobile-first Valentine prank/proposal app with shareable links.
 
-## What it does
-- Page 1 (`/`): enter your name + valentine name, generate shareable link
-- Page 2 (`/ask`): shows "Will you be my Valentine?"
-  - **Yes** works
-  - **No** dodges cursor/tap and keeps moving
+## Features (P0)
+- Name-based personalized link builder
+- Theme options: Cute / Chaotic / Filmy
+- Ask page with Yes + dodging No button
+- Confetti celebration on Yes
+- One-tap share (WhatsApp/Telegram/Copy)
+- Viral loop CTA: "Create your own"
 
-## Run locally
+## Local run
 
 ```bash
 cd valentine-link-app
 npx serve .
 ```
 
-Open the printed localhost URL.
+## Deploy
 
-## Deploy on Vercel
+Connected to Vercel + GitHub auto-deploy.
+Every push to `main` deploys automatically.
 
-### Option A: GitHub import
-1. Push this folder to GitHub
-2. In Vercel, **Add New Project** → import repo
-3. Framework preset: **Other**
-4. Deploy (no env vars needed)
-
-### Option B: Vercel CLI
-```bash
-npm i -g vercel
-cd valentine-link-app
-vercel
-```
-
-## Quick customization
-- Edit text/styles directly in `index.html` and `ask.html`
-- Change result lines in `ask.html` script section
+## URLs
+- Builder: `/`
+- Ask page format:
+  `/ask?from=Nishit&to=Aarohi&theme=cute&tone=classic`
