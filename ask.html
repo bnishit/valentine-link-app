@@ -30,6 +30,7 @@
 <body>
   <div class="float" aria-hidden="true"><span>💖</span><span>💘</span><span>🌸</span><span>✨</span><span>💝</span></div>
   <canvas id="fx"></canvas>
+  <audio id="bgm" preload="none"></audio>
   <main class="card">
     <div id="emoji" style="font-size:1.45rem">💖 💘 💝</div>
     <h1 id="title">Will you be my Valentine?</h1>
@@ -68,20 +69,24 @@ document.getElementById('createOwn').addEventListener('click',()=>location.href=
 const cvs=document.getElementById('fx'),ctx=cvs.getContext('2d');function resize(){cvs.width=innerWidth;cvs.height=innerHeight} resize(); addEventListener('resize',resize);let particles=[];const palette=['#ff4f9a','#ff83b6','#b286ff','#ffd166'];function burst(){particles=[];for(let i=0;i<90;i++)particles.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*5,vy:(Math.random()-.9)*6.5,life:75+Math.random()*35,size:4+Math.random()*4,color:palette[Math.floor(Math.random()*palette.length)]});requestAnimationFrame(tick)}function tick(){ctx.clearRect(0,0,cvs.width,cvs.height);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.09;p.life--;ctx.globalAlpha=Math.max(p.life/110,0);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();});ctx.globalAlpha=1;particles=particles.filter(p=>p.life>0);if(particles.length)requestAnimationFrame(tick)}
 
 const audioDiag=document.getElementById('audioDiag');
-const romanticLinks = [
-  { label: 'YouTube · Romantic Instrumental', url: 'https://www.youtube.com/results?search_query=romantic+instrumental+music' },
-  { label: 'YouTube · Bollywood Love Songs', url: 'https://www.youtube.com/results?search_query=bollywood+love+songs+playlist' },
-  { label: 'Spotify · Love Playlist', url: 'https://open.spotify.com/search/love%20songs%20playlist' }
+const tracks=[
+  {label:'Romantic 1',src:'/audio/romantic-1.wav'},
+  {label:'Romantic 2',src:'/audio/romantic-2.wav'},
+  {label:'Romantic 3',src:'/audio/romantic-3.wav'},
+  {label:'Romantic 4',src:'/audio/romantic-4.wav'}
 ];
-document.getElementById('musicBtn').onclick=()=>{
-  const choice = prompt(
-    'Pick music source:\n1) Romantic Instrumental\n2) Bollywood Love Songs\n3) Spotify Love Playlist\n\nEnter 1/2/3',
-    '2'
-  );
-  const idx = Math.max(1, Math.min(3, Number(choice || 2))) - 1;
-  const item = romanticLinks[idx];
-  audioDiag.textContent = `Opening: ${item.label}`;
-  window.open(item.url, '_blank', 'noopener,noreferrer');
+const bgm=document.getElementById('bgm');
+let trackIdx=0; bgm.loop=true;
+document.getElementById('musicBtn').onclick=async()=>{
+  try{
+    if(!bgm.src){ bgm.src=tracks[trackIdx].src; await bgm.play(); document.getElementById('musicBtn').textContent='⏸ Pause music'; audioDiag.textContent=`Now playing: ${tracks[trackIdx].label}`; return; }
+    if(bgm.paused){ await bgm.play(); document.getElementById('musicBtn').textContent='⏸ Pause music'; audioDiag.textContent=`Now playing: ${tracks[trackIdx].label}`; }
+    else { bgm.pause(); document.getElementById('musicBtn').textContent='🎵 Play romantic music'; audioDiag.textContent='Music: paused'; }
+  }catch{ audioDiag.textContent='Music blocked: tap again'; }
+};
+document.getElementById('musicBtn').ondblclick=async()=>{
+  trackIdx=(trackIdx+1)%tracks.length; bgm.src=tracks[trackIdx].src;
+  try{ await bgm.play(); document.getElementById('musicBtn').textContent='⏸ Pause music'; audioDiag.textContent=`Now playing: ${tracks[trackIdx].label}`; }catch{}
 };
 </script>
 </body>
