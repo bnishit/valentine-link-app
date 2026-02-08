@@ -38,8 +38,8 @@
     <div class="top">
       <span class="chip">💘 Cute</span>
       <span class="chip">📱 Mobile-first</span>
-      <button id="musicBtn" class="chip" style="cursor:pointer">🎵 Music: Off</button>
-      <span id="audioDiag" class="chip">Audio: off</span>
+      <button id="musicBtn" class="chip" style="cursor:pointer">🎵 Play romantic music</button>
+      <span id="audioDiag" class="chip">Music: external player</span>
     </div>
 
     <main class="card">
@@ -99,25 +99,22 @@ $('wa').onclick=async()=>{if(!link)return;await hit(`${lid}:share`);window.open(
 $('tg').onclick=async()=>{if(!link)return;await hit(`${lid}:share`);window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(hooks[hookEl.value])}`,'_blank')}
 $('statsBtn').onclick=refreshStats
 
-// lightweight ambient music (user-toggled)
-let ctx, osc1, osc2, gain, playing=false, musicTimer;
-$('musicBtn').onclick=async()=>{
-  try{
-    if(!playing){
-      ctx=new (window.AudioContext||window.webkitAudioContext)();
-      if(ctx.state==='suspended') await ctx.resume();
-      gain=ctx.createGain(); gain.gain.value=0.08; gain.connect(ctx.destination);
-      osc1=ctx.createOscillator(); osc2=ctx.createOscillator();
-      osc1.type='sine'; osc2.type='triangle'; osc1.frequency.value=261.63; osc2.frequency.value=329.63;
-      osc1.connect(gain); osc2.connect(gain); osc1.start(); osc2.start();
-      let t=0; const notes=[261.63,293.66,329.63,392.0,329.63,293.66];
-      const loop=()=>{ if(!playing) return; osc1.frequency.setValueAtTime(notes[t%notes.length],ctx.currentTime); osc2.frequency.setValueAtTime(notes[(t+2)%notes.length],ctx.currentTime); t++; musicTimer=setTimeout(loop,620);};
-      playing=true; loop(); $('musicBtn').textContent='🎵 Music: On'; $('audioDiag').textContent=`Audio: on (${ctx.state})`;
-    } else {
-      playing=false; clearTimeout(musicTimer); try{osc1.stop();osc2.stop();ctx.close()}catch{} $('musicBtn').textContent='🎵 Music: Off'; $('audioDiag').textContent='Audio: off';
-    }
-  } catch (e) { $('audioDiag').textContent='Audio blocked by browser/device'; }
-}
+// Romantic music via real streaming links (better than synthetic tones)
+const romanticLinks = [
+  { label: 'YouTube · Romantic Instrumental', url: 'https://www.youtube.com/results?search_query=romantic+instrumental+music' },
+  { label: 'YouTube · Bollywood Love Songs', url: 'https://www.youtube.com/results?search_query=bollywood+love+songs+playlist' },
+  { label: 'Spotify · Love Playlist', url: 'https://open.spotify.com/search/love%20songs%20playlist' }
+];
+$('musicBtn').onclick=()=>{
+  const choice = prompt(
+    'Pick music source:\n1) Romantic Instrumental\n2) Bollywood Love Songs\n3) Spotify Love Playlist\n\nEnter 1/2/3',
+    '2'
+  );
+  const idx = Math.max(1, Math.min(3, Number(choice || 2))) - 1;
+  const item = romanticLinks[idx];
+  $('audioDiag').textContent = `Opening: ${item.label}`;
+  window.open(item.url, '_blank', 'noopener,noreferrer');
+};
 </script>
 </body>
 </html>
