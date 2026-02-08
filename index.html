@@ -5,20 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Valentine Link Builder 💘</title>
   <meta name="description" content="Create a fun Valentine link in seconds" />
+  <meta property="og:title" content="Make a cute Valentine link 💘" />
+  <meta property="og:description" content="Build, preview, and share in under 15 seconds." />
   <style>
     :root{--pink:#ff4f9a;--pink2:#ff85b6;--lav:#b286ff;--txt:#351a2e;--muted:#7a5f73}
     *{box-sizing:border-box}
     body{margin:0;min-height:100svh;padding:16px;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--txt);
-      background:
-      radial-gradient(900px 540px at 12% -10%, #ffd4e9 0%, transparent 55%),
-      radial-gradient(900px 540px at 100% 0, #ffe4f2 0%, transparent 50%),
-      linear-gradient(180deg,#fff0f7,#fff8fc);
-      display:grid;place-items:center;overflow-x:hidden}
+      background:radial-gradient(900px 540px at 12% -10%, #ffd4e9 0%, transparent 55%),radial-gradient(900px 540px at 100% 0, #ffe4f2 0%, transparent 50%),linear-gradient(180deg,#fff0f7,#fff8fc);display:grid;place-items:center;overflow-x:hidden}
     .float{position:fixed;inset:0;pointer-events:none;opacity:.35}
     .float span{position:absolute;font-size:18px;animation:up 10s linear infinite}
     .float span:nth-child(1){left:7%;top:90%}.float span:nth-child(2){left:24%;top:95%;animation-delay:1.2s}.float span:nth-child(3){left:49%;top:92%;animation-delay:2.3s}.float span:nth-child(4){left:70%;top:93%;animation-delay:3.6s}.float span:nth-child(5){left:88%;top:94%;animation-delay:4.7s}
     @keyframes up{to{transform:translateY(-120vh);opacity:.1}}
-
     .wrap{width:min(860px,100%)}
     .top{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
     .chip{padding:6px 10px;border-radius:999px;font-size:.78rem;background:#fff;border:1px solid #ffd1e5;color:#815973}
@@ -48,7 +45,7 @@
     <div class="top">
       <span class="chip">💘 Cute-first</span>
       <span class="chip">📱 Mobile-first</span>
-      <span class="chip">🔁 Built to share</span>
+      <span class="chip">🇮🇳 Viral copy mode</span>
     </div>
 
     <main class="card">
@@ -81,6 +78,14 @@
             </select>
           </label>
         </div>
+
+        <label>Share hook (caption)
+          <select id="hook">
+            <option value="cute">Open this, no cheating 👀💖</option>
+            <option value="filmy">Aaj answer dena padega 😌🌹</option>
+            <option value="meme">Warning: impossible question ahead 😂</option>
+          </select>
+        </label>
       </div>
 
       <div class="btnRow">
@@ -96,36 +101,42 @@
           <button class="sbtn" id="wa">🟢 WhatsApp</button>
           <button class="sbtn" id="tg">✈️ Telegram</button>
         </div>
-        <div class="hint">Tip: send with “I made this for you 😌”.</div>
+        <div class="hint" id="hint">Tip: send with “I made this for you 😌”.</div>
       </div>
     </main>
   </div>
 
 <script>
 const $=(id)=>document.getElementById(id);
-const fromEl=$('from'),toEl=$('to'),themeEl=$('theme'),toneEl=$('tone');
-const out=$('out'),urlEl=$('url'),copyBtn=$('copy'),waBtn=$('wa'),tgBtn=$('tg');
+const fromEl=$('from'),toEl=$('to'),themeEl=$('theme'),toneEl=$('tone'),hookEl=$('hook');
+const out=$('out'),urlEl=$('url'),copyBtn=$('copy'),waBtn=$('wa'),tgBtn=$('tg'),hint=$('hint');
 let link='';
 const enc=v=>encodeURIComponent((v||'').trim().slice(0,40));
 
 function buildLink(){
   const from=enc(fromEl.value||'Someone');
   const to=enc(toEl.value||'You');
-  const theme=enc(themeEl.value);
-  const tone=enc(toneEl.value);
-  return `${location.origin}${location.pathname.replace(/index\.html$/,'')}ask?from=${from}&to=${to}&theme=${theme}&tone=${tone}`;
+  return `${location.origin}${location.pathname.replace(/index\.html$/,'')}ask?from=${from}&to=${to}&theme=${enc(themeEl.value)}&tone=${enc(toneEl.value)}&hook=${enc(hookEl.value)}`;
+}
+function hookText(){
+  return {
+    cute:'Open this, no cheating 👀💖',
+    filmy:'Aaj answer dena padega 😌🌹',
+    meme:'Warning: impossible question ahead 😂'
+  }[hookEl.value] || 'Open this 💘';
 }
 
 $('gen').addEventListener('click',()=>{
   link=buildLink();
   urlEl.href=link; urlEl.textContent=link;
   out.style.display='block';
+  hint.textContent=`Suggested caption: ${hookText()}`;
   out.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
 $('preview').addEventListener('click',()=>{ window.open(buildLink(),'_blank'); });
 copyBtn.addEventListener('click',async()=>{ if(!link) return; try{await navigator.clipboard.writeText(link);copyBtn.textContent='✅ Copied';setTimeout(()=>copyBtn.textContent='📋 Copy',1400);}catch{} });
-waBtn.addEventListener('click',()=>{ if(link) window.open(`https://wa.me/?text=${encodeURIComponent('Open this 💘 '+link)}`,'_blank'); });
-tgBtn.addEventListener('click',()=>{ if(link) window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Open this 💘')}`,'_blank'); });
+waBtn.addEventListener('click',()=>{ if(link) window.open(`https://wa.me/?text=${encodeURIComponent(hookText()+' '+link)}`,'_blank'); });
+tgBtn.addEventListener('click',()=>{ if(link) window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(hookText())}`,'_blank'); });
 </script>
 </body>
 </html>
