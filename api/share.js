@@ -12,7 +12,8 @@ module.exports = (req, res) => {
   const origin = `${proto}://${host}`;
 
   const askUrl = `${origin}/ask?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&theme=${encodeURIComponent(theme)}&tone=${encodeURIComponent(tone)}&hook=${encodeURIComponent(hook)}&lid=${encodeURIComponent(lid)}`;
-  const imageUrl = `${origin}/og-card.png`;
+  const cacheKey = encodeURIComponent(lid || Date.now().toString(36));
+  const imageUrl = `${origin}/api/og?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&v=${cacheKey}`;
 
   const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -21,14 +22,14 @@ module.exports = (req, res) => {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>${esc(to)}, will you be ${esc(from)}'s Valentine?</title>
-  <meta property="og:title" content="${esc(to)}, will you be ${esc(from)}'s Valentine? 💘" />
-  <meta property="og:description" content="Tap to answer 😌" />
+  <title>${esc(to)}, ${esc(from)} has something for you 💌</title>
+  <meta property="og:title" content="${esc(to)}, ${esc(from)} has something for you 💌" />
+  <meta property="og:description" content="Open this and answer the cutest question 😌" />
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:type" content="website" />
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:title" content="${esc(to)}, will you be ${esc(from)}'s Valentine? 💘" />
-  <meta property="twitter:description" content="Tap to answer 😌" />
+  <meta property="twitter:title" content="${esc(to)}, ${esc(from)} has something for you 💌" />
+  <meta property="twitter:description" content="Open this and answer the cutest question 😌" />
   <meta property="twitter:image" content="${imageUrl}" />
   <meta http-equiv="refresh" content="0; url=${askUrl}" />
   <script>location.replace(${JSON.stringify(askUrl)});</script>

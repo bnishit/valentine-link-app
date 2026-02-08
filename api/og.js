@@ -17,9 +17,9 @@ module.exports = (req, res) => {
   <circle cx="1050" cy="120" r="180" fill="#ffd2e8"/>
   <circle cx="130" cy="80" r="140" fill="#ffe5f2"/>
   <text x="70" y="120" font-family="Arial, sans-serif" font-size="56" font-weight="700" fill="#9f2b68">💘 Valentine Link</text>
-  <text x="70" y="250" font-family="Arial, sans-serif" font-size="66" font-weight="800" fill="#4a1f35">${esc(to)}, will you be</text>
-  <text x="70" y="335" font-family="Arial, sans-serif" font-size="66" font-weight="800" fill="#4a1f35">${esc(from)}'s Valentine?</text>
-  <text x="70" y="430" font-family="Arial, sans-serif" font-size="38" fill="#7d4b65">Tap to answer 😌</text>
+  <text x="70" y="250" font-family="Arial, sans-serif" font-size="66" font-weight="800" fill="#4a1f35">${esc(to)}, ${esc(from)}</text>
+  <text x="70" y="335" font-family="Arial, sans-serif" font-size="66" font-weight="800" fill="#4a1f35">has something for you 💌</text>
+  <text x="70" y="430" font-family="Arial, sans-serif" font-size="38" fill="#7d4b65">Open this and answer 😌</text>
   <text x="70" y="520" font-family="Arial, sans-serif" font-size="30" fill="#b14f7e">Made with mischief and love</text>
 </svg>`;
 
