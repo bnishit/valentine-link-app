@@ -13,9 +13,13 @@ module.exports = (req, res) => {
 
   const askUrl = `${origin}/ask?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&theme=${encodeURIComponent(theme)}&tone=${encodeURIComponent(tone)}&hook=${encodeURIComponent(hook)}&lid=${encodeURIComponent(lid)}`;
   const cacheKey = encodeURIComponent(lid || Date.now().toString(36));
-  const ogText = encodeURIComponent(`${to}, ${from} has something for you`);
+  // Keep OG text ASCII-safe to avoid WhatsApp mojibake.
+  const ascii = (s) => String(s || '').replace(/[^\x20-\x7E]/g, '').trim();
+  const safeTo = ascii(to) || 'Someone';
+  const safeFrom = ascii(from) || 'Someone';
+  const ogText = encodeURIComponent(`${safeTo} - ${safeFrom} has something for you`);
   // WhatsApp is much more reliable with PNG/JPG than SVG OG images.
-  const imageUrl = `https://dummyimage.com/1200x630/ffe3f1/4a1f35.png&text=${ogText}%20%F0%9F%92%8C&v=${cacheKey}`;
+  const imageUrl = `https://dummyimage.com/1200x630/ffe3f1/4a1f35.png&text=${ogText}&v=${cacheKey}`;
 
   const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -24,14 +28,14 @@ module.exports = (req, res) => {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>${esc(to)}, ${esc(from)} has something for you 💌</title>
-  <meta property="og:title" content="${esc(to)}, ${esc(from)} has something for you 💌" />
-  <meta property="og:description" content="Open this and answer the cutest question 😌" />
+  <title>${esc(safeTo)}, ${esc(safeFrom)} has something for you</title>
+  <meta property="og:title" content="${esc(safeTo)}, ${esc(safeFrom)} has something for you" />
+  <meta property="og:description" content="Open this and answer the cutest question" />
   <meta property="og:image" content="${imageUrl}" />
   <meta property="og:type" content="website" />
   <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:title" content="${esc(to)}, ${esc(from)} has something for you 💌" />
-  <meta property="twitter:description" content="Open this and answer the cutest question 😌" />
+  <meta property="twitter:title" content="${esc(safeTo)}, ${esc(safeFrom)} has something for you" />
+  <meta property="twitter:description" content="Open this and answer the cutest question" />
   <meta property="twitter:image" content="${imageUrl}" />
   <meta http-equiv="refresh" content="0; url=${askUrl}" />
   <script>location.replace(${JSON.stringify(askUrl)});</script>
