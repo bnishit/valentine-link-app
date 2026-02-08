@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valentine Link Builder 💘</title>
+  <style>
+    :root { --bg:#fff0f6; --card:#ffffff; --text:#2b2b2b; --accent:#ff4d8d; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(135deg,#ffe3ee,#fff7fb);color:var(--text);min-height:100vh;display:grid;place-items:center;padding:24px}
+    .card{width:min(680px,100%);background:var(--card);border-radius:20px;padding:24px;box-shadow:0 15px 40px rgba(255,77,141,.18)}
+    h1{margin:0 0 8px;font-size:1.8rem}
+    p{opacity:.85}
+    .grid{display:grid;gap:12px;margin-top:16px}
+    input{width:100%;padding:12px 14px;border:1px solid #ffd3e3;border-radius:12px;font-size:1rem}
+    button{margin-top:14px;background:var(--accent);color:white;border:0;padding:12px 16px;border-radius:12px;font-weight:600;cursor:pointer}
+    .out{margin-top:16px;padding:12px;border-radius:12px;background:#fff6fa;border:1px dashed #ffb6d1;word-break:break-all;display:none}
+    .tiny{font-size:.9rem;opacity:.75}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Build your Valentine link 💌</h1>
+    <p>Enter two names and generate a cute prank/proposal link.</p>
+
+    <div class="grid">
+      <label>
+        Your name
+        <input id="from" placeholder="Nishit" maxlength="40" />
+      </label>
+      <label>
+        Valentine’s name
+        <input id="to" placeholder="Aarohi" maxlength="40" />
+      </label>
+    </div>
+
+    <button id="gen">Generate Link</button>
+
+    <div id="out" class="out">
+      <div><strong>Share this link:</strong></div>
+      <a id="url" href="#"></a>
+      <div class="tiny" style="margin-top:8px">Tip: Works great in DMs 😄</div>
+    </div>
+  </main>
+
+<script>
+const fromEl = document.getElementById('from');
+const toEl = document.getElementById('to');
+const genBtn = document.getElementById('gen');
+const out = document.getElementById('out');
+const urlEl = document.getElementById('url');
+
+function clean(v){ return encodeURIComponent((v||'').trim().slice(0,40)); }
+
+genBtn.addEventListener('click', () => {
+  const from = clean(fromEl.value || 'Someone');
+  const to = clean(toEl.value || 'You');
+  const link = `${location.origin}${location.pathname.replace(/index\.html$/,'')}ask.html?from=${from}&to=${to}`;
+  urlEl.href = link;
+  urlEl.textContent = link;
+  out.style.display = 'block';
+});
+</script>
+</body>
+</html>

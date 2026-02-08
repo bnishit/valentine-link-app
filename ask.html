@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Will you be my Valentine? 💘</title>
+  <style>
+    :root { --bg:#fff0f6; --card:#fff; --text:#2b2b2b; --yes:#ff4d8d; --no:#6c757d; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:radial-gradient(circle at top,#ffe6f1,#fff8fc);min-height:100vh;display:grid;place-items:center;padding:16px;overflow:hidden}
+    .card{width:min(720px,100%);background:var(--card);border-radius:24px;padding:28px;text-align:center;box-shadow:0 18px 45px rgba(255,77,141,.18);position:relative}
+    h1{margin:0 0 10px;font-size:clamp(1.4rem,4vw,2.1rem)}
+    .subtitle{opacity:.8;margin-bottom:22px}
+    .row{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;min-height:64px;position:relative}
+    button{border:0;padding:12px 18px;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;transition:transform .12s ease}
+    button:active{transform:scale(.97)}
+    #yes{background:var(--yes);color:#fff}
+    #no{background:#f1f3f5;color:#333;position:relative}
+    .result{margin-top:18px;font-size:1.15rem;font-weight:700;min-height:30px}
+    .hearts{font-size:1.3rem;letter-spacing:.25rem}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="hearts">💖 💘 💝</div>
+    <h1 id="title">Will you be my Valentine?</h1>
+    <div class="subtitle" id="subtitle"></div>
+
+    <div class="row" id="btnRow">
+      <button id="yes">Yes 💞</button>
+      <button id="no">No 🙈</button>
+    </div>
+
+    <div class="result" id="result"></div>
+  </main>
+
+<script>
+const p = new URLSearchParams(location.search);
+const from = (p.get('from') || 'Someone').slice(0,40);
+const to = (p.get('to') || 'You').slice(0,40);
+
+const title = document.getElementById('title');
+const subtitle = document.getElementById('subtitle');
+const yes = document.getElementById('yes');
+const no = document.getElementById('no');
+const result = document.getElementById('result');
+let noMoves = 0;
+
+function esc(s){ return s.replace(/[&<>'\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c])); }
+title.innerHTML = `${esc(to)}, will you be ${esc(from)}'s Valentine?`;
+subtitle.textContent = `Choose carefully 😌`;
+
+function moveNo(){
+  noMoves++;
+  const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  const vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  const maxX = Math.max(20, vw - 160);
+  const maxY = Math.max(20, vh - 80);
+  const x = Math.floor(Math.random() * maxX);
+  const y = Math.floor(Math.random() * maxY);
+  no.style.position = 'fixed';
+  no.style.left = x + 'px';
+  no.style.top = y + 'px';
+
+  if(noMoves >= 6){
+    result.textContent = 'Nice try 😏 There was never really a No option.';
+    no.textContent = 'Still No? 🤨';
+    yes.style.transform = `scale(${Math.min(1 + noMoves*0.05, 1.35)})`;
+  }
+}
+
+['mouseenter','touchstart','click'].forEach(evt => {
+  no.addEventListener(evt, (e)=>{ e.preventDefault(); moveNo(); }, {passive:false});
+});
+
+yes.addEventListener('click', ()=>{
+  result.textContent = `Yay! ${to} said YES to ${from}! 💖`;
+  no.style.display = 'none';
+  yes.textContent = 'It\'s a date! 🎉';
+});
+</script>
+</body>
+</html>
