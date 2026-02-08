@@ -12,7 +12,7 @@ module.exports = (req, res) => {
   const origin = `${proto}://${host}`;
 
   const askUrl = `${origin}/ask?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&theme=${encodeURIComponent(theme)}&tone=${encodeURIComponent(tone)}&hook=${encodeURIComponent(hook)}&lid=${encodeURIComponent(lid)}`;
-  const imageUrl = `${origin}/api/og?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+  const imageUrl = `${origin}/og-card.png`;
 
   const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 

@@ -41,6 +41,7 @@
       <button class="sbtn" id="replyChallenge">😈 Send reply challenge</button>
       <button class="sbtn" id="createOwn">💌 Create your own</button>
     </div>
+    <div style="margin-top:8px"><button id="musicBtn" class="sbtn">🎵 Music: Off</button></div>
     <div class="tiny">Made with mischief and love.</div>
   </main>
 
@@ -64,6 +65,21 @@ document.getElementById('shareWa').addEventListener('click',async()=>{try{await 
 document.getElementById('replyChallenge').addEventListener('click',async()=>{try{await fetch(`https://api.countapi.xyz/hit/${NS}/${encodeURIComponent(lid+':share')}`)}catch{}const msg=`Now your turn 😈 ${hookTxt[hook] || 'Open this 💘'} ${location.origin}/`;window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');});
 document.getElementById('createOwn').addEventListener('click',()=>location.href=location.origin+'/');
 const cvs=document.getElementById('fx'),ctx=cvs.getContext('2d');function resize(){cvs.width=innerWidth;cvs.height=innerHeight} resize(); addEventListener('resize',resize);let particles=[];function burst(){particles=[];for(let i=0;i<120;i++)particles.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*7,vy:(Math.random()-.9)*8,life:80+Math.random()*40,size:9+Math.random()*8,rot:Math.random()*Math.PI});requestAnimationFrame(tick)}function tick(){ctx.clearRect(0,0,cvs.width,cvs.height);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.life--;p.rot+=.08;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(p.life/120,0);ctx.font=`${p.size}px serif`;ctx.fillText(Math.random()>.5?'💖':'✨',0,0);ctx.restore()});particles=particles.filter(p=>p.life>0);if(particles.length)requestAnimationFrame(tick)}
+
+let mCtx,m1,m2,mGain,mOn=false;
+document.getElementById('musicBtn').onclick=()=>{
+  if(!mOn){
+    mCtx=new (window.AudioContext||window.webkitAudioContext)();
+    mGain=mCtx.createGain(); mGain.gain.value=0.02; mGain.connect(mCtx.destination);
+    m1=mCtx.createOscillator(); m2=mCtx.createOscillator();
+    m1.type='sine'; m2.type='triangle'; m1.connect(mGain); m2.connect(mGain); m1.start(); m2.start();
+    const notes=[261.63,293.66,329.63,392,329.63,293.66]; let i=0;
+    const loop=()=>{ if(!mOn) return; m1.frequency.setValueAtTime(notes[i%notes.length],mCtx.currentTime); m2.frequency.setValueAtTime(notes[(i+2)%notes.length],mCtx.currentTime); i++; setTimeout(loop,900); };
+    mOn=true; loop(); document.getElementById('musicBtn').textContent='🎵 Music: On';
+  } else {
+    mOn=false; try{m1.stop();m2.stop();mCtx.close();}catch{} document.getElementById('musicBtn').textContent='🎵 Music: Off';
+  }
+}
 </script>
 </body>
 </html>
