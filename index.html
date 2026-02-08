@@ -107,7 +107,11 @@ function hookText(){ return {cute:'Open this, no cheating 👀💖',filmy:'Aaj a
 function mkId(){ return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4); }
 function buildLink(customLid){
   const from=enc(fromEl.value||'Someone'); const to=enc(toEl.value||'You');
-  return `${location.origin}${location.pathname.replace(/index\.html$/,'')}ask?from=${from}&to=${to}&theme=${enc(themeEl.value)}&tone=${enc(toneEl.value)}&hook=${enc(hookEl.value)}&lid=${encodeURIComponent(customLid)}`;
+  return `${location.origin}/api/share?from=${from}&to=${to}&theme=${enc(themeEl.value)}&tone=${enc(toneEl.value)}&hook=${enc(hookEl.value)}&lid=${encodeURIComponent(customLid)}`;
+}
+function buildAskLink(customLid){
+  const from=enc(fromEl.value||'Someone'); const to=enc(toEl.value||'You');
+  return `${location.origin}/ask?from=${from}&to=${to}&theme=${enc(themeEl.value)}&tone=${enc(toneEl.value)}&hook=${enc(hookEl.value)}&lid=${encodeURIComponent(customLid)}`;
 }
 async function getCount(key){
   try{const r=await fetch(`https://api.countapi.xyz/get/${NS}/${encodeURIComponent(key)}`);const j=await r.json();return Number(j.value||0)}catch{return 0}
@@ -129,7 +133,7 @@ $('gen').addEventListener('click',()=>{
   out.scrollIntoView({behavior:'smooth',block:'nearest'});
   refreshStats();
 });
-$('preview').addEventListener('click',()=>{ window.open(buildLink(lid || mkId()),'_blank'); });
+$('preview').addEventListener('click',()=>{ window.open(buildAskLink(lid || mkId()),'_blank'); });
 statsBtn.addEventListener('click',refreshStats);
 copyBtn.addEventListener('click',async()=>{ if(!link) return; try{await navigator.clipboard.writeText(link);copyBtn.textContent='✅ Copied';setTimeout(()=>copyBtn.textContent='📋 Copy',1400);}catch{} });
 waBtn.addEventListener('click',async()=>{ if(!link) return; try{await fetch(`https://api.countapi.xyz/hit/${NS}/${encodeURIComponent(lid+':share')}`)}catch{} window.open(`https://wa.me/?text=${encodeURIComponent(hookText()+' '+link)}`,'_blank'); });
