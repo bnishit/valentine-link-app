@@ -6,77 +6,54 @@
   <title>Valentine Link Builder 💘</title>
   <meta name="description" content="Create a fun Valentine link in seconds" />
   <style>
-    :root{
-      --bg:#140a14; --bg2:#2a0f2f; --card:rgba(255,255,255,.88); --txt:#2c1632; --muted:#6b5a70;
-      --pink:#ff3d8e; --rose:#ff7cab; --lav:#9b6dff;
-    }
+    :root{--pink:#ff4f9a;--pink2:#ff85b6;--lav:#b286ff;--txt:#351a2e;--muted:#7a5f73}
     *{box-sizing:border-box}
-    body{
-      margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-      min-height:100svh; color:#fff; padding:16px; display:grid; place-items:center; overflow-x:hidden;
+    body{margin:0;min-height:100svh;padding:16px;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--txt);
       background:
-        radial-gradient(900px 500px at 10% -10%, #4c174f 0%, transparent 55%),
-        radial-gradient(900px 500px at 110% 10%, #3f1a61 0%, transparent 50%),
-        linear-gradient(135deg,var(--bg),var(--bg2));
-    }
-    .hearts{position:fixed;inset:0;pointer-events:none;opacity:.35}
-    .hearts span{position:absolute;font-size:18px;animation:float 9s linear infinite}
-    .hearts span:nth-child(1){left:8%;top:88%;animation-delay:0s}
-    .hearts span:nth-child(2){left:22%;top:95%;animation-delay:1.1s}
-    .hearts span:nth-child(3){left:43%;top:92%;animation-delay:2.7s}
-    .hearts span:nth-child(4){left:66%;top:90%;animation-delay:4s}
-    .hearts span:nth-child(5){left:84%;top:94%;animation-delay:5.4s}
-    @keyframes float{to{transform:translateY(-120vh) rotate(18deg);opacity:.15}}
+      radial-gradient(900px 540px at 12% -10%, #ffd4e9 0%, transparent 55%),
+      radial-gradient(900px 540px at 100% 0, #ffe4f2 0%, transparent 50%),
+      linear-gradient(180deg,#fff0f7,#fff8fc);
+      display:grid;place-items:center;overflow-x:hidden}
+    .float{position:fixed;inset:0;pointer-events:none;opacity:.35}
+    .float span{position:absolute;font-size:18px;animation:up 10s linear infinite}
+    .float span:nth-child(1){left:7%;top:90%}.float span:nth-child(2){left:24%;top:95%;animation-delay:1.2s}.float span:nth-child(3){left:49%;top:92%;animation-delay:2.3s}.float span:nth-child(4){left:70%;top:93%;animation-delay:3.6s}.float span:nth-child(5){left:88%;top:94%;animation-delay:4.7s}
+    @keyframes up{to{transform:translateY(-120vh);opacity:.1}}
 
     .wrap{width:min(860px,100%)}
-    .top{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
-    .chip{font-size:.78rem;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25)}
-
-    .card{
-      background:var(--card); color:var(--txt); border-radius:24px; padding:18px;
-      box-shadow:0 30px 80px rgba(8,2,10,.5), inset 0 1px 0 rgba(255,255,255,.75);
-      border:1px solid rgba(255,255,255,.8);
-      backdrop-filter: blur(8px);
-    }
-    h1{margin:0 0 4px;font-size:clamp(1.5rem,4vw,2.3rem);line-height:1.1}
+    .top{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+    .chip{padding:6px 10px;border-radius:999px;font-size:.78rem;background:#fff;border:1px solid #ffd1e5;color:#815973}
+    .card{background:rgba(255,255,255,.92);border:1px solid #ffd9ea;border-radius:24px;padding:18px;box-shadow:0 20px 50px rgba(214,37,118,.18);backdrop-filter:blur(4px)}
+    h1{margin:0 0 4px;font-size:clamp(1.5rem,4vw,2.35rem);line-height:1.08}
     p{margin:0;color:var(--muted)}
     .grid{display:grid;gap:10px;margin-top:14px}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    label{font-size:.92rem;color:#432c4b;font-weight:600}
-    input,select{width:100%;margin-top:6px;border:1px solid #efc8dc;border-radius:12px;padding:12px;background:#fff;font-size:1rem;outline:none}
-    input:focus,select:focus{border-color:#d287ff;box-shadow:0 0 0 4px rgba(165,108,255,.14)}
-
-    .btn{margin-top:12px;width:100%;border:0;border-radius:14px;padding:13px 16px;font-size:1rem;font-weight:800;color:#fff;cursor:pointer;
-      background:linear-gradient(135deg,var(--pink),var(--rose) 45%,var(--lav));
-      box-shadow:0 10px 26px rgba(255,61,142,.35);
-    }
-
-    .out{display:none;margin-top:12px;padding:12px;border-radius:14px;background:linear-gradient(180deg,#fff8fc,#fff);border:1px dashed #f2bad5}
-    .link{display:block;margin-top:8px;word-break:break-all;color:#8b245b;font-weight:700;text-decoration:none}
+    label{font-size:.92rem;font-weight:600;color:#4a2d3f}
+    input,select{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #f2c8db;background:#fff;font-size:1rem;outline:none}
+    input:focus,select:focus{border-color:#d08fff;box-shadow:0 0 0 4px rgba(203,132,255,.15)}
+    .btnRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .btn{border:0;border-radius:12px;padding:13px 14px;font-weight:800;font-size:1rem;color:#fff;cursor:pointer}
+    .primary{background:linear-gradient(135deg,var(--pink),var(--pink2),var(--lav));box-shadow:0 10px 24px rgba(255,79,154,.3)}
+    .ghost{background:#fff;color:#7a4d66;border:1px solid #f2c8db}
+    .out{display:none;margin-top:12px;padding:12px;border-radius:14px;background:#fff8fc;border:1px dashed #f4b8d3}
+    .link{display:block;margin-top:8px;word-break:break-all;color:#a12661;font-weight:700;text-decoration:none}
     .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .sbtn{border:1px solid #f2c6dc;background:#fff;padding:9px 11px;border-radius:10px;font-weight:800;font-size:.9rem;cursor:pointer}
-    .hint{font-size:.82rem;color:#7e6475;margin-top:8px}
-
-    @media (max-width:640px){
-      .row{grid-template-columns:1fr}
-      .card{padding:14px;border-radius:18px}
-      .btn{padding:14px}
-    }
+    .sbtn{border:1px solid #f3c7dc;background:#fff;border-radius:10px;padding:9px 11px;font-weight:800;font-size:.9rem;cursor:pointer}
+    .hint{font-size:.82rem;color:#876a7b;margin-top:8px}
+    @media (max-width:640px){.row,.btnRow{grid-template-columns:1fr}.card{padding:14px;border-radius:18px}}
   </style>
 </head>
 <body>
-  <div class="hearts" aria-hidden="true"><span>💖</span><span>💘</span><span>✨</span><span>🌹</span><span>💝</span></div>
-
+  <div class="float" aria-hidden="true"><span>💖</span><span>💘</span><span>🌸</span><span>✨</span><span>💝</span></div>
   <div class="wrap">
     <div class="top">
-      <span class="chip">💘 Mobile-first</span>
-      <span class="chip">⚡ Build in &lt; 15 sec</span>
-      <span class="chip">🔁 Share-ready</span>
+      <span class="chip">💘 Cute-first</span>
+      <span class="chip">📱 Mobile-first</span>
+      <span class="chip">🔁 Built to share</span>
     </div>
 
     <main class="card">
       <h1>Build your Valentine link 💌</h1>
-      <p>Personalized, playful, and actually fun to share.</p>
+      <p>Personalized, playful, and made for DMs.</p>
 
       <div class="grid">
         <div class="row">
@@ -106,7 +83,10 @@
         </div>
       </div>
 
-      <button class="btn" id="gen">Generate Link</button>
+      <div class="btnRow">
+        <button class="btn primary" id="gen">Generate Link</button>
+        <button class="btn ghost" id="preview">👀 Preview</button>
+      </div>
 
       <div class="out" id="out">
         <strong>Share this link:</strong>
@@ -116,7 +96,7 @@
           <button class="sbtn" id="wa">🟢 WhatsApp</button>
           <button class="sbtn" id="tg">✈️ Telegram</button>
         </div>
-        <div class="hint">Pro tip: send with “I made this for you 😌”.</div>
+        <div class="hint">Tip: send with “I made this for you 😌”.</div>
       </div>
     </main>
   </div>
@@ -124,22 +104,26 @@
 <script>
 const $=(id)=>document.getElementById(id);
 const fromEl=$('from'),toEl=$('to'),themeEl=$('theme'),toneEl=$('tone');
-const out=$('out'),urlEl=$('url');
-const copyBtn=$('copy'),waBtn=$('wa'),tgBtn=$('tg');
+const out=$('out'),urlEl=$('url'),copyBtn=$('copy'),waBtn=$('wa'),tgBtn=$('tg');
 let link='';
 const enc=v=>encodeURIComponent((v||'').trim().slice(0,40));
 
-$('gen').addEventListener('click',()=>{
+function buildLink(){
   const from=enc(fromEl.value||'Someone');
   const to=enc(toEl.value||'You');
   const theme=enc(themeEl.value);
   const tone=enc(toneEl.value);
-  link=`${location.origin}${location.pathname.replace(/index\.html$/,'')}ask?from=${from}&to=${to}&theme=${theme}&tone=${tone}`;
+  return `${location.origin}${location.pathname.replace(/index\.html$/,'')}ask?from=${from}&to=${to}&theme=${theme}&tone=${tone}`;
+}
+
+$('gen').addEventListener('click',()=>{
+  link=buildLink();
   urlEl.href=link; urlEl.textContent=link;
   out.style.display='block';
   out.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
-copyBtn.addEventListener('click',async()=>{ if(!link)return; try{await navigator.clipboard.writeText(link);copyBtn.textContent='✅ Copied';setTimeout(()=>copyBtn.textContent='📋 Copy',1400);}catch{} });
+$('preview').addEventListener('click',()=>{ window.open(buildLink(),'_blank'); });
+copyBtn.addEventListener('click',async()=>{ if(!link) return; try{await navigator.clipboard.writeText(link);copyBtn.textContent='✅ Copied';setTimeout(()=>copyBtn.textContent='📋 Copy',1400);}catch{} });
 waBtn.addEventListener('click',()=>{ if(link) window.open(`https://wa.me/?text=${encodeURIComponent('Open this 💘 '+link)}`,'_blank'); });
 tgBtn.addEventListener('click',()=>{ if(link) window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Open this 💘')}`,'_blank'); });
 </script>
