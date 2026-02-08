@@ -13,7 +13,9 @@ module.exports = (req, res) => {
 
   const askUrl = `${origin}/ask?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&theme=${encodeURIComponent(theme)}&tone=${encodeURIComponent(tone)}&hook=${encodeURIComponent(hook)}&lid=${encodeURIComponent(lid)}`;
   const cacheKey = encodeURIComponent(lid || Date.now().toString(36));
-  const imageUrl = `${origin}/api/og?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&v=${cacheKey}`;
+  const ogText = encodeURIComponent(`${to}, ${from} has something for you`);
+  // WhatsApp is much more reliable with PNG/JPG than SVG OG images.
+  const imageUrl = `https://dummyimage.com/1200x630/ffe3f1/4a1f35.png&text=${ogText}%20%F0%9F%92%8C&v=${cacheKey}`;
 
   const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
