@@ -7,83 +7,84 @@
   <meta name="description" content="Create a fun Valentine link in seconds" />
   <style>
     :root{
-      --bg1:#ffedf4; --bg2:#fff7fb; --card:#ffffff; --text:#23121a; --muted:#6f5a64;
-      --accent:#ff3d8e; --accent2:#ff8fab; --ring:rgba(255,61,142,.18);
+      --bg:#140a14; --bg2:#2a0f2f; --card:rgba(255,255,255,.88); --txt:#2c1632; --muted:#6b5a70;
+      --pink:#ff3d8e; --rose:#ff7cab; --lav:#9b6dff;
     }
     *{box-sizing:border-box}
     body{
-      margin:0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: radial-gradient(1200px 700px at 20% -10%, #ffd6e8 0%, transparent 60%),
-                  radial-gradient(900px 500px at 100% 0%, #ffe9f3 0%, transparent 55%),
-                  linear-gradient(180deg,var(--bg1),var(--bg2));
-      color:var(--text);
-      min-height:100svh;
-      padding:16px;
-      display:grid;
-      place-items:center;
+      margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      min-height:100svh; color:#fff; padding:16px; display:grid; place-items:center; overflow-x:hidden;
+      background:
+        radial-gradient(900px 500px at 10% -10%, #4c174f 0%, transparent 55%),
+        radial-gradient(900px 500px at 110% 10%, #3f1a61 0%, transparent 50%),
+        linear-gradient(135deg,var(--bg),var(--bg2));
     }
-    .wrap{width:min(760px,100%)}
-    .top{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px}
-    .chip{font-size:.78rem;padding:6px 10px;border-radius:999px;background:#fff;border:1px solid #ffd5e5;color:#6d4155}
+    .hearts{position:fixed;inset:0;pointer-events:none;opacity:.35}
+    .hearts span{position:absolute;font-size:18px;animation:float 9s linear infinite}
+    .hearts span:nth-child(1){left:8%;top:88%;animation-delay:0s}
+    .hearts span:nth-child(2){left:22%;top:95%;animation-delay:1.1s}
+    .hearts span:nth-child(3){left:43%;top:92%;animation-delay:2.7s}
+    .hearts span:nth-child(4){left:66%;top:90%;animation-delay:4s}
+    .hearts span:nth-child(5){left:84%;top:94%;animation-delay:5.4s}
+    @keyframes float{to{transform:translateY(-120vh) rotate(18deg);opacity:.15}}
+
+    .wrap{width:min(860px,100%)}
+    .top{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+    .chip{font-size:.78rem;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25)}
+
     .card{
-      background:var(--card);
-      border-radius:24px;
-      padding:18px;
-      box-shadow:0 18px 45px rgba(214,33,107,.15);
-      border:1px solid #ffe2ed;
+      background:var(--card); color:var(--txt); border-radius:24px; padding:18px;
+      box-shadow:0 30px 80px rgba(8,2,10,.5), inset 0 1px 0 rgba(255,255,255,.75);
+      border:1px solid rgba(255,255,255,.8);
+      backdrop-filter: blur(8px);
     }
-    h1{margin:0 0 6px;font-size:clamp(1.4rem,3.8vw,2.1rem);line-height:1.15}
+    h1{margin:0 0 4px;font-size:clamp(1.5rem,4vw,2.3rem);line-height:1.1}
     p{margin:0;color:var(--muted)}
     .grid{display:grid;gap:10px;margin-top:14px}
-    label{font-size:.92rem;color:#4a303d}
-    input,select{
-      width:100%;margin-top:6px;
-      border:1px solid #ffd6e6;
-      border-radius:12px;padding:12px;
-      font-size:1rem;background:#fff;
-      outline:none;
-    }
-    input:focus,select:focus{box-shadow:0 0 0 4px var(--ring);border-color:#ff94bb}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .btn{
-      margin-top:12px;width:100%;
-      border:0;border-radius:12px;padding:13px 14px;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#fff;font-weight:800;font-size:1rem;cursor:pointer;
+    label{font-size:.92rem;color:#432c4b;font-weight:600}
+    input,select{width:100%;margin-top:6px;border:1px solid #efc8dc;border-radius:12px;padding:12px;background:#fff;font-size:1rem;outline:none}
+    input:focus,select:focus{border-color:#d287ff;box-shadow:0 0 0 4px rgba(165,108,255,.14)}
+
+    .btn{margin-top:12px;width:100%;border:0;border-radius:14px;padding:13px 16px;font-size:1rem;font-weight:800;color:#fff;cursor:pointer;
+      background:linear-gradient(135deg,var(--pink),var(--rose) 45%,var(--lav));
+      box-shadow:0 10px 26px rgba(255,61,142,.35);
     }
-    .out{display:none;margin-top:12px;border:1px dashed #ffb6d1;background:#fff6fa;padding:12px;border-radius:12px}
-    .link{display:block;margin-top:8px;word-break:break-all;font-weight:600;color:#9a1f59;text-decoration:none}
-    .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .sbtn{border:1px solid #ffd2e3;background:#fff;border-radius:10px;padding:9px 11px;font-weight:700;font-size:.92rem;cursor:pointer}
-    .hint{font-size:.83rem;color:#7f6471;margin-top:8px}
+
+    .out{display:none;margin-top:12px;padding:12px;border-radius:14px;background:linear-gradient(180deg,#fff8fc,#fff);border:1px dashed #f2bad5}
+    .link{display:block;margin-top:8px;word-break:break-all;color:#8b245b;font-weight:700;text-decoration:none}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .sbtn{border:1px solid #f2c6dc;background:#fff;padding:9px 11px;border-radius:10px;font-weight:800;font-size:.9rem;cursor:pointer}
+    .hint{font-size:.82rem;color:#7e6475;margin-top:8px}
 
     @media (max-width:640px){
       .row{grid-template-columns:1fr}
       .card{padding:14px;border-radius:18px}
-      .top{flex-wrap:wrap}
+      .btn{padding:14px}
     }
   </style>
 </head>
 <body>
+  <div class="hearts" aria-hidden="true"><span>💖</span><span>💘</span><span>✨</span><span>🌹</span><span>💝</span></div>
+
   <div class="wrap">
     <div class="top">
       <span class="chip">💘 Mobile-first</span>
       <span class="chip">⚡ Build in &lt; 15 sec</span>
-      <span class="chip">🔁 Viral loop ready</span>
+      <span class="chip">🔁 Share-ready</span>
     </div>
 
     <main class="card">
       <h1>Build your Valentine link 💌</h1>
-      <p>Create a playful proposal page and share it instantly.</p>
+      <p>Personalized, playful, and actually fun to share.</p>
 
       <div class="grid">
         <div class="row">
           <label>Your name
-            <input id="from" placeholder="Nishit" maxlength="40" />
+            <input id="from" placeholder="Rahul" maxlength="40" />
           </label>
           <label>Valentine’s name
-            <input id="to" placeholder="Aarohi" maxlength="40" />
+            <input id="to" placeholder="Priya" maxlength="40" />
           </label>
         </div>
 
@@ -110,25 +111,23 @@
       <div class="out" id="out">
         <strong>Share this link:</strong>
         <a id="url" class="link" href="#"></a>
-
         <div class="actions">
           <button class="sbtn" id="copy">📋 Copy</button>
           <button class="sbtn" id="wa">🟢 WhatsApp</button>
           <button class="sbtn" id="tg">✈️ Telegram</button>
         </div>
-        <div class="hint">Tip: send with one line — “I made this for you 😌”.</div>
+        <div class="hint">Pro tip: send with “I made this for you 😌”.</div>
       </div>
     </main>
   </div>
 
 <script>
-const $ = (id)=>document.getElementById(id);
-const fromEl=$('from'), toEl=$('to'), themeEl=$('theme'), toneEl=$('tone');
-const out=$('out'), urlEl=$('url');
-const copyBtn=$('copy'), waBtn=$('wa'), tgBtn=$('tg');
+const $=(id)=>document.getElementById(id);
+const fromEl=$('from'),toEl=$('to'),themeEl=$('theme'),toneEl=$('tone');
+const out=$('out'),urlEl=$('url');
+const copyBtn=$('copy'),waBtn=$('wa'),tgBtn=$('tg');
 let link='';
-
-function enc(v){return encodeURIComponent((v||'').trim().slice(0,40));}
+const enc=v=>encodeURIComponent((v||'').trim().slice(0,40));
 
 $('gen').addEventListener('click',()=>{
   const from=enc(fromEl.value||'Someone');
@@ -138,15 +137,11 @@ $('gen').addEventListener('click',()=>{
   link=`${location.origin}${location.pathname.replace(/index\.html$/,'')}ask?from=${from}&to=${to}&theme=${theme}&tone=${tone}`;
   urlEl.href=link; urlEl.textContent=link;
   out.style.display='block';
-  out.scrollIntoView({behavior:'smooth',block:'center'});
+  out.scrollIntoView({behavior:'smooth',block:'nearest'});
 });
-
-copyBtn.addEventListener('click', async ()=>{
-  if(!link) return;
-  try{ await navigator.clipboard.writeText(link); copyBtn.textContent='✅ Copied'; setTimeout(()=>copyBtn.textContent='📋 Copy',1400);}catch{}
-});
-waBtn.addEventListener('click', ()=>{ if(link) window.open(`https://wa.me/?text=${encodeURIComponent('Open this 💘 '+link)}`,'_blank');});
-tgBtn.addEventListener('click', ()=>{ if(link) window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Open this 💘')}`,'_blank');});
+copyBtn.addEventListener('click',async()=>{ if(!link)return; try{await navigator.clipboard.writeText(link);copyBtn.textContent='✅ Copied';setTimeout(()=>copyBtn.textContent='📋 Copy',1400);}catch{} });
+waBtn.addEventListener('click',()=>{ if(link) window.open(`https://wa.me/?text=${encodeURIComponent('Open this 💘 '+link)}`,'_blank'); });
+tgBtn.addEventListener('click',()=>{ if(link) window.open(`https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent('Open this 💘')}`,'_blank'); });
 </script>
 </body>
 </html>
