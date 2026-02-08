@@ -39,6 +39,7 @@
       <span class="chip">💘 Cute</span>
       <span class="chip">📱 Mobile-first</span>
       <button id="musicBtn" class="chip" style="cursor:pointer">🎵 Music: Off</button>
+      <span id="audioDiag" class="chip">Audio: off</span>
     </div>
 
     <main class="card">
@@ -101,19 +102,21 @@ $('statsBtn').onclick=refreshStats
 // lightweight ambient music (user-toggled)
 let ctx, osc1, osc2, gain, playing=false, musicTimer;
 $('musicBtn').onclick=async()=>{
-  if(!playing){
-    ctx=new (window.AudioContext||window.webkitAudioContext)();
-    if(ctx.state==='suspended') await ctx.resume();
-    gain=ctx.createGain(); gain.gain.value=0.06; gain.connect(ctx.destination);
-    osc1=ctx.createOscillator(); osc2=ctx.createOscillator();
-    osc1.type='sine'; osc2.type='triangle'; osc1.frequency.value=261.63; osc2.frequency.value=329.63;
-    osc1.connect(gain); osc2.connect(gain); osc1.start(); osc2.start();
-    let t=0; const notes=[261.63,293.66,329.63,392.0,329.63,293.66];
-    const loop=()=>{ if(!playing) return; osc1.frequency.setValueAtTime(notes[t%notes.length],ctx.currentTime); osc2.frequency.setValueAtTime(notes[(t+2)%notes.length],ctx.currentTime); t++; musicTimer=setTimeout(loop,650);};
-    playing=true; loop(); $('musicBtn').textContent='🎵 Music: On';
-  } else {
-    playing=false; clearTimeout(musicTimer); try{osc1.stop();osc2.stop();ctx.close()}catch{} $('musicBtn').textContent='🎵 Music: Off';
-  }
+  try{
+    if(!playing){
+      ctx=new (window.AudioContext||window.webkitAudioContext)();
+      if(ctx.state==='suspended') await ctx.resume();
+      gain=ctx.createGain(); gain.gain.value=0.08; gain.connect(ctx.destination);
+      osc1=ctx.createOscillator(); osc2=ctx.createOscillator();
+      osc1.type='sine'; osc2.type='triangle'; osc1.frequency.value=261.63; osc2.frequency.value=329.63;
+      osc1.connect(gain); osc2.connect(gain); osc1.start(); osc2.start();
+      let t=0; const notes=[261.63,293.66,329.63,392.0,329.63,293.66];
+      const loop=()=>{ if(!playing) return; osc1.frequency.setValueAtTime(notes[t%notes.length],ctx.currentTime); osc2.frequency.setValueAtTime(notes[(t+2)%notes.length],ctx.currentTime); t++; musicTimer=setTimeout(loop,620);};
+      playing=true; loop(); $('musicBtn').textContent='🎵 Music: On'; $('audioDiag').textContent=`Audio: on (${ctx.state})`;
+    } else {
+      playing=false; clearTimeout(musicTimer); try{osc1.stop();osc2.stop();ctx.close()}catch{} $('musicBtn').textContent='🎵 Music: Off'; $('audioDiag').textContent='Audio: off';
+    }
+  } catch (e) { $('audioDiag').textContent='Audio blocked by browser/device'; }
 }
 </script>
 </body>

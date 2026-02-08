@@ -5,6 +5,8 @@ test('builder has placeholders + preview and generate', async ({ page, context }
   await expect(page.getByPlaceholder('Rahul')).toBeVisible();
   await expect(page.getByPlaceholder('Priya')).toBeVisible();
   await expect(page.getByRole('button', { name: /preview/i })).toBeVisible();
+  await page.getByRole('button', { name: /music/i }).click();
+  await expect(page.getByText(/Audio:/)).toContainText(/on|blocked/i);
 
   await page.getByPlaceholder('Rahul').fill('Rahul');
   await page.getByPlaceholder('Priya').fill('Priya');

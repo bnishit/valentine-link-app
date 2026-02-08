@@ -42,6 +42,7 @@
       <button class="sbtn" id="createOwn">💌 Create your own</button>
     </div>
     <div style="margin-top:8px"><button id="musicBtn" class="sbtn">🎵 Music: Off</button></div>
+    <div id="audioDiag" class="tiny" style="margin-top:6px">Audio status: off</div>
     <div class="tiny">Made with mischief and love.</div>
   </main>
 
@@ -64,22 +65,27 @@ yes.addEventListener('click',async()=>{try{await fetch(`https://api.countapi.xyz
 document.getElementById('shareWa').addEventListener('click',async()=>{try{await fetch(`https://api.countapi.xyz/hit/${NS}/${encodeURIComponent(lid+':share')}`)}catch{}const msg=`${to} said YES to ${from}! 💘`;window.open(`https://wa.me/?text=${encodeURIComponent(msg+' '+location.href)}`,'_blank');});
 document.getElementById('replyChallenge').addEventListener('click',async()=>{try{await fetch(`https://api.countapi.xyz/hit/${NS}/${encodeURIComponent(lid+':share')}`)}catch{}const msg=`Now your turn 😈 ${hookTxt[hook] || 'Open this 💘'} ${location.origin}/`;window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');});
 document.getElementById('createOwn').addEventListener('click',()=>location.href=location.origin+'/');
-const cvs=document.getElementById('fx'),ctx=cvs.getContext('2d');function resize(){cvs.width=innerWidth;cvs.height=innerHeight} resize(); addEventListener('resize',resize);let particles=[];function burst(){particles=[];for(let i=0;i<70;i++)particles.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*5.5,vy:(Math.random()-.9)*7,life:70+Math.random()*35,size:10+Math.random()*6,rot:Math.random()*Math.PI,sym:Math.random()>.5?'💖':'✨'});requestAnimationFrame(tick)}function tick(){ctx.clearRect(0,0,cvs.width,cvs.height);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.1;p.life--;p.rot+=.05;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(p.life/105,0);ctx.font=`${p.size}px serif`;ctx.fillText(p.sym,0,0);ctx.restore()});particles=particles.filter(p=>p.life>0);if(particles.length)requestAnimationFrame(tick)}
+const cvs=document.getElementById('fx'),ctx=cvs.getContext('2d');function resize(){cvs.width=innerWidth;cvs.height=innerHeight} resize(); addEventListener('resize',resize);let particles=[];const palette=['#ff4f9a','#ff83b6','#b286ff','#ffd166'];function burst(){particles=[];for(let i=0;i<90;i++)particles.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*5,vy:(Math.random()-.9)*6.5,life:75+Math.random()*35,size:4+Math.random()*4,color:palette[Math.floor(Math.random()*palette.length)]});requestAnimationFrame(tick)}function tick(){ctx.clearRect(0,0,cvs.width,cvs.height);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.09;p.life--;ctx.globalAlpha=Math.max(p.life/110,0);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();});ctx.globalAlpha=1;particles=particles.filter(p=>p.life>0);if(particles.length)requestAnimationFrame(tick)}
 
-let mCtx,m1,m2,mGain,mOn=false,mTimer;
+let mCtx,m1,m2,mGain,mOn=false,mTimer; const audioDiag=document.getElementById('audioDiag');
+function setDiag(t){audioDiag.textContent=t;}
 document.getElementById('musicBtn').onclick=async()=>{
-  if(!mOn){
-    mCtx=new (window.AudioContext||window.webkitAudioContext)();
-    if(mCtx.state==='suspended') await mCtx.resume();
-    mGain=mCtx.createGain(); mGain.gain.value=0.06; mGain.connect(mCtx.destination);
-    m1=mCtx.createOscillator(); m2=mCtx.createOscillator();
-    m1.type='sine'; m2.type='triangle'; m1.connect(mGain); m2.connect(mGain); m1.start(); m2.start();
-    const notes=[261.63,293.66,329.63,392,329.63,293.66]; let i=0;
-    const loop=()=>{ if(!mOn) return; m1.frequency.setValueAtTime(notes[i%notes.length],mCtx.currentTime); m2.frequency.setValueAtTime(notes[(i+2)%notes.length],mCtx.currentTime); i++; mTimer=setTimeout(loop,650); };
-    mOn=true; loop(); document.getElementById('musicBtn').textContent='🎵 Music: On';
-  } else {
-    mOn=false; clearTimeout(mTimer); try{m1.stop();m2.stop();mCtx.close();}catch{} document.getElementById('musicBtn').textContent='🎵 Music: Off';
-  }
+  try{
+    if(!mOn){
+      mCtx=new (window.AudioContext||window.webkitAudioContext)();
+      if(mCtx.state==='suspended') await mCtx.resume();
+      mGain=mCtx.createGain(); mGain.gain.value=0.08; mGain.connect(mCtx.destination);
+      m1=mCtx.createOscillator(); m2=mCtx.createOscillator();
+      m1.type='sine'; m2.type='triangle'; m1.connect(mGain); m2.connect(mGain); m1.start(); m2.start();
+      const notes=[261.63,293.66,329.63,392,329.63,293.66]; let i=0;
+      const loop=()=>{ if(!mOn) return; m1.frequency.setValueAtTime(notes[i%notes.length],mCtx.currentTime); m2.frequency.setValueAtTime(notes[(i+2)%notes.length],mCtx.currentTime); i++; mTimer=setTimeout(loop,620); };
+      mOn=true; loop(); document.getElementById('musicBtn').textContent='🎵 Music: On';
+      setDiag(`Audio status: on (${mCtx.state}). If silent on iPhone, turn off mute/silent mode.`);
+    } else {
+      mOn=false; clearTimeout(mTimer); try{m1.stop();m2.stop();mCtx.close();}catch{} document.getElementById('musicBtn').textContent='🎵 Music: Off';
+      setDiag('Audio status: off');
+    }
+  } catch (e){ setDiag('Audio status: blocked by browser/device. Tap again or disable silent mode.'); }
 }
 </script>
 </body>
